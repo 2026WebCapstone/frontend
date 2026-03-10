@@ -1,0 +1,31 @@
+[1mdiff --git a/src/pages/ReplyManagement.tsx b/src/pages/ReplyManagement.tsx[m
+[1mindex 2e15d74..4a0c2ee 100644[m
+[1m--- a/src/pages/ReplyManagement.tsx[m
+[1m+++ b/src/pages/ReplyManagement.tsx[m
+[36m@@ -538,6 +538,9 @@[m [mexport default function ReplyManagement() {[m
+       fetchVideoInfo();[m
+       // 모든 댓글 로드 (처음에는 classify 시도)[m
+       fetchAllComments();[m
+[32m+[m[32m      // 긍정/부정 댓글도 함께 로드[m
+[32m+[m[32m      fetchPositiveComments();[m
+[32m+[m[32m      fetchNegativeComments();[m
+     }[m
+   }, [videoId]);[m
+ [m
+[36m@@ -820,13 +823,15 @@[m [mexport default function ReplyManagement() {[m
+   useEffect(() => {[m
+     console.log("데이터 상태 업데이트:", {[m
+       allCommentsLength: allComments.length,[m
+[32m+[m[32m      positiveCommentsLength: positiveComments.length,[m
+[32m+[m[32m      negativeCommentsLength: negativeComments.length,[m
+       currentTab: activeTab,[m
+       currentCommentsLength: currentComments.length,[m
+       pagedCommentsLength: pagedComments.length,[m
+       currentPage,[m
+       totalPages[m
+     });[m
+[31m-  }, [allComments, activeTab, currentComments, pagedComments, currentPage, totalPages]);[m
+[32m+[m[32m  }, [allComments, positiveComments, negativeComments, activeTab, currentComments, pagedComments, currentPage, totalPages]);[m
+ [m
+   // 개별 체크박스 토글[m
+   const handleCheck = (commentId: number) => {[m

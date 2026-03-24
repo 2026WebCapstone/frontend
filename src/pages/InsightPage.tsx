@@ -247,7 +247,7 @@ const CompetitorInsightPage: React.FC = () => {
                   좋아요
                 </button>
                 <button
-                  onClick={() => setActiveTab("dislikes")}
+                  onClick={() => {}}
                   className={`text-[1.5rem] font-medium transition-colors ${
                     activeTab === "dislikes"
                       ? "text-red-500 border-b-2 border-red-500"

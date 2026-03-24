@@ -150,19 +150,16 @@ export default function MainPage() {
               <button
                 className="bg-[#c90101] hover:bg-[#b31217] text-white text-[1.7rem] font-medium rounded-xl transition-colors w-full mt-20 mb-2 py-3"
                 onClick={() => {
+                  if (idx === 1) {
+                    return;
+                  }
                   if (!isLoggedIn) {
                     navigate("/login");
                   } else {
                     if (idx === 2) {
                       navigate("/my?tab=video");
-                    } 
-                    // else if (idx === 0) {
-                    //   navigate("/in");
-                    // } else if (idx === 1) {
-                    //   navigate("/category");
-                    // } 
-                    else {
-                      // 기존 동작 또는 다른 카드별 동작
+                    } else if (idx === 0) {
+                      navigate("/in");
                     }
                   }
                 }}

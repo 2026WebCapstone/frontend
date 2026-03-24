@@ -42,10 +42,10 @@ const Sidebar: React.FC = () => {
               ? "opacity-100 brightness-150"
               : "opacity-60 group-hover:opacity-100 group-hover:brightness-200"
           }`}
-          // onClick={() => navigate("/in")}
+          onClick={() => navigate("/in")}
         />
       </button>
-      <button className="p-3 rounded-lg transition-all group">
+      <button onClick={(e) => e.preventDefault()} className="p-3 rounded-lg transition-all group">
         <img
           src="/analysis.png"
           alt="Analysis"
@@ -54,7 +54,6 @@ const Sidebar: React.FC = () => {
               ? "opacity-100 brightness-150"
               : "opacity-60 group-hover:opacity-100 group-hover:brightness-200"
           }`}
-          // onClick={() => navigate("/category")}
         />
       </button>
     </div>

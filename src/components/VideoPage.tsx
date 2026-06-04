@@ -245,59 +245,19 @@ const VideoPage: React.FC<VideoPageProps> = ({
               댓글 분석
             </button>
             <button
-              onClick={async () => {
-                try {
-                  // 1. 먼저 classify API 호출
-                  const token = localStorage.getItem("token");
-                  const classifyResponse = await fetch(
-                    `http://localhost:8000/api/videos/${video.videoId}/comments/classify`,
-                    {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Authorization: token ? `Bearer ${token}` : "",
-                      },
-                    }
-                  );
-
-                  if (classifyResponse.ok) {
-                    console.log("✅ classify API 호출 성공");
-                  } else {
-                    console.error(
-                      "❌ classify API 호출 실패:",
-                      classifyResponse.status
-                    );
-                  }
-
-                  // 2. ReplyManagement 페이지로 이동
-                  navigate(`/reply_management/${video.videoId}`, {
-                    state: {
-                      videoInfo: {
-                        thumbnail: video.thumbnail,
-                        date: formatDate(video.upload_date),
-                        title: video.title,
-                        views: formatNumber(video.viewCount) + "회",
-                        commentRate: video.commentRate,
-                        likeRate: video.likeRate,
-                      },
+              onClick={() => {
+                navigate(`/reply_management/${video.videoId}`, {
+                  state: {
+                    videoInfo: {
+                      thumbnail: video.thumbnail,
+                      date: formatDate(video.upload_date),
+                      title: video.title,
+                      views: formatNumber(video.viewCount) + "회",
+                      commentRate: video.commentRate,
+                      likeRate: video.likeRate,
                     },
-                  });
-                } catch (error) {
-                  console.error("classify API 호출 중 오류:", error);
-                  // 에러가 있어도 페이지는 이동
-                  navigate(`/reply_management/${video.videoId}`, {
-                    state: {
-                      videoInfo: {
-                        thumbnail: video.thumbnail,
-                        date: formatDate(video.upload_date),
-                        title: video.title,
-                        views: formatNumber(video.viewCount) + "회",
-                        commentRate: video.commentRate,
-                        likeRate: video.likeRate,
-                      },
-                    },
-                  });
-                }
+                  },
+                });
               }}
                              className="flex-1 bg-white hover:bg-gray-300 text-red-500 py-2 rounded-lg font-medium transition-colors border border-red-500 hover:border-red-500 hover:text-red-600"
               style={{ fontSize: "16px" }}

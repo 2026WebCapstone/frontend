@@ -238,8 +238,7 @@ export default function ReplyManagement() {
         if (statusData.status === "completed") {
           console.log("classify 작업 완료, 댓글 다시 불러오기");
           isClassifyingRef.current = false;
-          // 댓글 다시 불러오기 (classify 없이)
-          fetchAllComments();
+          await loadCommentLists();
         } else if (statusData.status === "failed") {
           console.error("classify 작업 실패");
           isClassifyingRef.current = false;
@@ -392,6 +391,7 @@ export default function ReplyManagement() {
           date: comment.comment_date
             ? new Date(comment.comment_date).toLocaleDateString("ko-KR")
             : "날짜 없음",
+          originalDate: comment.comment_date,
           checked: false,
           comment_type: comment.comment_type,
           is_filtered: comment.is_filtered,
@@ -404,6 +404,59 @@ export default function ReplyManagement() {
     } catch (error) {
       console.error("댓글 조회 실패:", error);
       setError("댓글을 불러오는데 실패했습니다.");
+    }
+  };
+
+  const loadCommentLists = async () => {
+    await Promise.all([
+      fetchAllComments(),
+      fetchPositiveComments(),
+      fetchNegativeComments(),
+    ]);
+  };
+
+  const syncCommentsAndLoad = async () => {
+    if (!videoId || isClassifyingRef.current) return;
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `http://localhost:8000/api/videos/${videoId}/comments/sync`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token ? `Bearer ${token}` : "",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`댓글 동기화 실패: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log("댓글 동기화 결과:", result);
+
+      if (result.job_id) {
+        isClassifyingRef.current = true;
+        classifyJobIdRef.current = result.job_id;
+        checkClassifyStatus(result.job_id);
+        return;
+      }
+
+      await loadCommentLists();
+    } catch (error) {
+      console.error("댓글 동기화 중 오류:", error);
+      setError("댓글을 동기화하는데 실패했습니다.");
+      await loadCommentLists();
+    } finally {
+      if (!isClassifyingRef.current) {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -534,11 +587,7 @@ export default function ReplyManagement() {
 
       // 비디오 정보 가져오기
       fetchVideoInfo();
-      // 모든 댓글 로드 (처음에는 classify 시도)
-      fetchAllComments();
-      // 긍정/부정 댓글도 함께 로드
-      fetchPositiveComments();
-      fetchNegativeComments();
+      syncCommentsAndLoad();
     }
   }, [videoId]);
 

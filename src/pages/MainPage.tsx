@@ -128,11 +128,11 @@ export default function MainPage() {
 
       {/* Main Section */}
       <div className="flex flex-row justify-center items-center mt-8 mb-8 w-full mx-auto">
-        <div className="flex flex-row justify-between items-center gap-8 mx-32 mt-8 w-full">
+        <div className="grid grid-cols-3 items-stretch gap-8 mx-32 mt-8 w-full">
           {cardData.map((card, idx) => (
             <div
               key={idx}
-              className="bg-[#111213] rounded-2xl border border-rgba(255,255,255,0.6) w-auto h-auto flex flex-col px-8 py-10"
+              className="bg-[#111213] rounded-2xl border border-rgba(255,255,255,0.6) w-full h-full flex flex-col px-8 py-10"
               style={{ boxShadow: "0 0 24px 2px #e52d27a0" }}
             >
               <img
@@ -148,7 +148,7 @@ export default function MainPage() {
                 {card.desc}
               </div>
               <button
-                className="bg-[#c90101] hover:bg-[#b31217] text-white text-[1.7rem] font-medium rounded-xl transition-colors w-full mt-20 mb-2 py-3"
+                className="bg-[#c90101] hover:bg-[#b31217] text-white text-[1.7rem] font-medium rounded-xl transition-colors w-full mt-auto mb-2 py-3"
                 onClick={() => {
                   if (idx === 1) {
                     return;
